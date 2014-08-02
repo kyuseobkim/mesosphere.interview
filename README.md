@@ -40,4 +40,4 @@ This algorithm is better than FCFS because it utilizes not only temporal proximi
 We assume that everything happens synchronously. For example, a pick up request cannot be sent while step is executed. Also, we assume that the elevator has an inifite capacity. This can be easily improved by adding a capacity checking method before letting a passenger into an elevator.
 
 **Build Instruction**
-This is a maven project so you can build a JAR by typing `maven jar` in the top project directory where pom.xml is located. Other maven common tasks can be performed as explained in http://maven.apache.org/archives/maven-1.x/start/quick-start.html
+This is a maven project so you can build the project by typing `mvn clean package` in the top project directory where pom.xml is located. Other maven common tasks can be performed as explained in http://maven.apache.org/guides/getting-started/
