@@ -60,7 +60,6 @@ public class ElevatorControlSystem {
 
         }
 
-
         for (Elevator elevator : elevators) {
 
             update(elevator);
@@ -73,7 +72,6 @@ public class ElevatorControlSystem {
         Elevator minLoadElevator = elevators.get(0);
         Elevator closestElevatorMovingToFloor = null;
         Elevator closestStandingElevator = null;
-
 
         for (Elevator elevator : elevators) {
 
@@ -107,7 +105,6 @@ public class ElevatorControlSystem {
                 else if(elevator.getDirection() == passenger.getDirection()) {
                     passenger.getOn(elevator);
                 }
-                break;
             }
         }
 
@@ -119,7 +116,7 @@ public class ElevatorControlSystem {
             } else if (closestElevatorMovingToFloor == null && closestStandingElevator != null) {
                 closestStandingElevator.schedule(passenger);
             } else {
-                findCloser(closestStandingElevator, closestElevatorMovingToFloor, passenger).schedule(passenger);
+                findCloser(closestElevatorMovingToFloor, closestStandingElevator, passenger).schedule(passenger);
             }
         }
 
@@ -129,6 +126,7 @@ public class ElevatorControlSystem {
 
         List<Passenger> passengerInsideElevator = new ArrayList<Passenger>(elevator.getPassengers());
 
+        //unload passengers if possible
         for (Passenger passenger : passengerInsideElevator) {
             if (passenger.getGoalFloor() == elevator.getCurrentFloor()) {
                 elevator.unloadPassenger(passenger);
@@ -137,11 +135,12 @@ public class ElevatorControlSystem {
             }
         }
 
+        //make the elevator idle if there is no one to serve
         if (elevator.getPassengers().size() == 0 && elevator.getScheduledPassengers().size() == 0) {
             elevator.setDirection(Direction.IDLE);
         }
 
-
+        //update the elevator location
         if(elevator.getDirection() == Direction.UP) {
             elevator.incrementFloor(1);
         } else if (elevator.getDirection() == Direction.DOWN) {

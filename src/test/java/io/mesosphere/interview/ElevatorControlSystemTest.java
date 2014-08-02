@@ -94,6 +94,82 @@ public class ElevatorControlSystemTest {
         Assert.assertEquals(Direction.IDLE, elevator1.getDirection());
         Assert.assertEquals(0, elevatorControlSystem.getPassengers().size());
 
+    }
+
+    @Test
+    public void stepTest2() {
+
+        elevatorControlSystem.addElevator(elevator1); //idle at 2
+        elevatorControlSystem.addElevator(elevator2); //idle at 1
+
+        elevatorControlSystem.pickUp(passenger1); // at floor 1 want to go to floor 5
+        elevatorControlSystem.pickUp(passenger2); // at floor 4 want to go to floor 1
+
+        Elevator elevator3 = new Elevator(2, 5);
+        elevatorControlSystem.addElevator(elevator3);
+
+        elevatorControlSystem.step();
+        Assert.assertEquals(4, elevator3.getCurrentFloor());
+        Assert.assertEquals(1, elevator3.getScheduledPassengers().size());
+        Assert.assertEquals(0, elevator3.getPassengers().size());
+        Assert.assertEquals(Direction.DOWN, elevator3.getDirection());
+        Assert.assertEquals(Direction.IDLE, elevator1.getDirection());
+        Assert.assertEquals(Direction.UP, elevator2.getDirection());
+
+        Passenger passenger3 = new Passenger(3, 0);
+        elevatorControlSystem.pickUp(passenger3);
+
+        elevatorControlSystem.step();
+        Assert.assertTrue(passenger3.isScheduled());
+        Assert.assertEquals(Direction.IDLE, elevator1.getDirection());
+        Assert.assertEquals(Direction.UP, elevator2.getDirection());
+        Assert.assertEquals(Direction.DOWN, passenger3.getDirection());
+        Assert.assertEquals(2, passenger3.getCurrentElevator().getElevatorID());
+        Assert.assertEquals(3, elevator3.getCurrentFloor());
+        Assert.assertEquals(1, elevator3.getScheduledPassengers().size());
+        Assert.assertEquals(passenger3, elevator3.getScheduledPassengers().get(0));
+        Assert.assertEquals(1, elevator3.getPassengers().size());
+        Assert.assertEquals(passenger2, elevator3.getPassengers().get(0));
+
+        elevatorControlSystem.step();
+        Assert.assertTrue(passenger3.isInsideElevator());
+        Assert.assertEquals(Direction.IDLE, elevator1.getDirection());
+        Assert.assertEquals(Direction.UP, elevator2.getDirection());
+        Assert.assertEquals(Direction.DOWN, elevator3.getDirection());
+        Assert.assertEquals(2, passenger3.getCurrentElevator().getElevatorID());
+        Assert.assertEquals(2, elevator3.getCurrentFloor());
+        Assert.assertEquals(0, elevator3.getScheduledPassengers().size());
+        Assert.assertEquals(2, elevator3.getPassengers().size());
+
+        elevatorControlSystem.step();
+        Assert.assertTrue(passenger3.isInsideElevator());
+        Assert.assertEquals(Direction.IDLE, elevator1.getDirection());
+        Assert.assertEquals(Direction.UP, elevator2.getDirection());
+        Assert.assertEquals(Direction.DOWN, elevator3.getDirection());
+        Assert.assertEquals(2, passenger3.getCurrentElevator().getElevatorID());
+        Assert.assertEquals(1, elevator3.getCurrentFloor());
+        Assert.assertEquals(0, elevator3.getScheduledPassengers().size());
+        Assert.assertEquals(2, elevator3.getPassengers().size());
+
+        elevatorControlSystem.step();
+        Assert.assertTrue(passenger3.isInsideElevator());
+        Assert.assertEquals(Direction.IDLE, elevator1.getDirection());
+        Assert.assertEquals(Direction.IDLE, elevator2.getDirection());
+        Assert.assertEquals(Direction.DOWN, elevator3.getDirection());
+        Assert.assertEquals(2, passenger3.getCurrentElevator().getElevatorID());
+        Assert.assertEquals(0, elevator3.getCurrentFloor());
+        Assert.assertEquals(0, elevator3.getScheduledPassengers().size());
+        Assert.assertEquals(1, elevator3.getPassengers().size());
+
+        elevatorControlSystem.step();
+        Assert.assertFalse(passenger3.isInsideElevator());
+        Assert.assertEquals(Direction.IDLE, elevator1.getDirection());
+        Assert.assertEquals(Direction.IDLE, elevator2.getDirection());
+        Assert.assertEquals(Direction.IDLE, elevator3.getDirection());
+        Assert.assertEquals(null, passenger3.getCurrentElevator());
+        Assert.assertEquals(0, elevator3.getCurrentFloor());
+        Assert.assertEquals(0, elevator3.getScheduledPassengers().size());
+        Assert.assertEquals(0, elevator3.getPassengers().size());
 
     }
 
