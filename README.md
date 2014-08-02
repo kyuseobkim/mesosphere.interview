@@ -27,7 +27,7 @@ Similarly, a pick up request can be sent by calling `pickUp(Passenger passenger)
 
 My scheduling algorithm can be summarized as follows:
 
-Given a passenger:
+Given a passenger, I assign an elevator to pick him up in the following order:
 <ol>
 <li>Pick an idle elevator located on the current floor of the passenger if such an elevator exists.</li>
 <li>Pick an elevator that is closest to the passenger and is either idle or moving in the same direction as the passenger's intended direction.</li>
@@ -35,7 +35,7 @@ Given a passenger:
 </ol>
 In the second case, if there is a tie, I pick a moving elevator. However, for a purpose of load balancing, we may choose to assign an idle elevator.
 
-This algorithm is better than FCFS because it utilizes not only temporal proximity but also spatial proximity. Also, it's more parallel than FCFS.
+This algorithm is better than FCFS because it utilizes not only temporal proximity but also spatial proximity because we consider the distance between the  elevator and the passenger. Also, it's more parallel than FCFS.
 
 We assume that everything happens synchronously. For example, a pick up request cannot be sent while step is executed. Also, we assume that the elevator has an inifite capacity. This can be easily improved by adding a capacity checking method before letting a passenger into an elevator.
 
